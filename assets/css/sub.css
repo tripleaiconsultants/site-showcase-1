@@ -950,7 +950,7 @@ body:has(.header.sticky-top) {
   .navmenu .dropdown ul {
     position: static;
     display: none;
-    z-index: 99;
+    z-index: 9999;
     padding: 0;
     margin: 0 20px;
     background-color: var(--nav-dropdown-background-color);
@@ -959,6 +959,7 @@ body:has(.header.sticky-top) {
     transition: all 0.5s ease-in-out;
     max-height: 0;
     overflow: hidden;
+    pointer-events: none;
   }
 
   .navmenu .dropdown ul ul {
@@ -971,6 +972,31 @@ body:has(.header.sticky-top) {
     padding: 10px 0;
     margin: 10px 20px;
     background-color: rgba(33, 37, 41, 0.03);
+    pointer-events: auto;
+    overflow: visible;
+  }
+
+  .navmenu .dropdown ul.dropdown-active li {
+    pointer-events: auto;
+    display: block;
+    width: 100%;
+  }
+
+  .navmenu .dropdown ul.dropdown-active li a {
+    pointer-events: auto;
+    position: relative;
+    z-index: 9999;
+    display: block;
+    width: 100%;
+    padding: 10px 20px;
+  }
+
+  /* Hide dark mode toggle inside mobile dropdown menu */
+  .mobile-nav-active .navmenu > .header-mode-toggle {
+    position: fixed;
+    top: 15px;
+    right: 60px;
+    z-index: 9999;
   }
 
   .mobile-nav-active {
@@ -993,10 +1019,19 @@ body:has(.header.sticky-top) {
     inset: 0;
     background: rgba(33, 37, 41, 0.8);
     transition: 0.3s;
+    z-index: 9998;
   }
 
   .mobile-nav-active .navmenu>ul {
     display: block;
+    overflow-y: auto;
+    pointer-events: auto;
+  }
+
+  /* Hide popup when mobile nav is open */
+  .mobile-nav-active .side-popup-widget {
+    z-index: 1 !important;
+    pointer-events: none !important;
   }
 }
 
@@ -2843,6 +2878,17 @@ body.dark-mode .navmenu .dropdown ul {
 
   .mobile-nav-active .navmenu ul {
     display: block;
+  }
+
+  /* Keep dark mode toggle visible but outside the dropdown list */
+  .mobile-nav-active #darkModeToggle.header-mode-toggle,
+  .mobile-nav-active .header-mode-toggle {
+    position: fixed !important;
+    top: 18px;
+    right: 55px;
+    z-index: 10000 !important;
+    display: flex !important;
+    color: #fff;
   }
 }
 
