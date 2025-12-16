@@ -582,6 +582,43 @@
     });
   }
 
+  // Handle browser back/forward buttons - clear transition state
+  window.addEventListener('pageshow', function(e) {
+    // persisted = true means page was loaded from bfcache (back/forward cache)
+    if (e.persisted) {
+      // Clear any transition states to prevent lag/stuck animations
+      sessionStorage.removeItem('pageTransition');
+      sessionStorage.removeItem('darkModeTransition');
+      
+      // Reset body classes in case they were stuck
+      document.body.classList.remove('transitioning-out', 'transitioning-in', 'aos-delay-init');
+      document.body.removeAttribute('data-transition');
+      
+      // Hide overlay if visible
+      const overlay = document.querySelector('.page-transition-overlay');
+      if (overlay) {
+        overlay.classList.remove('active');
+      }
+    }
+  });
+
+  // Also handle popstate for hash changes and history navigation
+  window.addEventListener('popstate', function() {
+    // Clear transition states
+    sessionStorage.removeItem('pageTransition');
+    sessionStorage.removeItem('darkModeTransition');
+    
+    // Reset body classes
+    document.body.classList.remove('transitioning-out', 'transitioning-in', 'aos-delay-init');
+    document.body.removeAttribute('data-transition');
+    
+    // Hide overlay
+    const overlay = document.querySelector('.page-transition-overlay');
+    if (overlay) {
+      overlay.classList.remove('active');
+    }
+  });
+
   // Initialize
   if (document.readyState === 'loading') {
     document.addEventListener('DOMContentLoaded', function() {
